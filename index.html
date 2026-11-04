@@ -120,7 +120,7 @@ function list() {
     rs = rs.filter(x => x.have > 0).sort((a, b) => a.miss.length - b.miss.length || b.have - a.have || a.r.min - b.r.min);
     const full = rs.filter(x => !x.miss.length).length;
     count.textContent = rs.length
-      ? (full ? `Можно готовить: ${full} ${plural(full, "рецепт", "рецепта", "рецептов")}` : `Почти готово: ${rs.length} ${plural(rs.length, "рецепт", "рецепта", "рецептов")}`)
+      ? (full ? `Можно готовить сразу: ${full} ${plural(full, "рецепт", "рецепта", "рецептов")}` : `Подходит: ${rs.length} ${plural(rs.length, "рецепт", "рецепта", "рецептов")}`)
       : "Пока ничего — отметь ещё продукт";
   } else {
     rs.sort((a, b) => a.r.needs.length - b.r.needs.length || a.r.min - b.r.min);
@@ -154,7 +154,8 @@ let barVisible = false;
 function toggleJump() { jump.hidden = !jump.dataset.on || barVisible; }
 jump.addEventListener("click", () => bar.scrollIntoView({behavior: "smooth"}));
 if ("IntersectionObserver" in window) {
-  new IntersectionObserver(([e]) => { barVisible = e.isIntersecting || e.boundingClientRect.top < 0; toggleJump(); }).observe(bar);
+  new IntersectionObserver(([e]) => { barVisible = e.isIntersecting || e.boundingClientRect.top < 0; toggleJump(); },
+                           {rootMargin: "0px 0px -150px 0px"}).observe(bar);  // the fixed button covers the bottom
 }
 picker();
 list();
